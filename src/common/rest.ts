@@ -12,6 +12,7 @@ import { CampaignResponse, CampaignInput } from 'gql/campaigns'
 import { endpoints } from './api-endpoints'
 import { CheckoutSessionInput, CheckoutSessionResponse } from 'gql/donations'
 import { CreateBeneficiaryInput, PersonResponse } from 'gql/person'
+import { BootcampInput, BootcampType } from 'gql/bootcamp'
 
 export const queryFn: QueryFunction = async function ({ queryKey }) {
   const response = await axios.get(queryKey.join('/'))
@@ -76,3 +77,19 @@ export const createCheckoutSession: MutationFunction<
     data,
   )
 }
+
+export const createBootcamper: MutationFunction<AxiosResponse<BootcampType>, BootcampInput> =
+  async (data: BootcampInput) => {
+    return await axios.post<BootcampInput, AxiosResponse<BootcampType>>(
+      endpoints.bootcamp.createBootcamper.url,
+      data,
+    )
+  }
+
+// export const editBootcamper: MutationFunction<AxiosResponse<BootcampType>, BootcampInput > =
+// async (data: BootcampInput, id: string) => {
+//   return await axios.patch<BootcampInput, AxiosResponse<BootcampType>>(
+//     endpoints.bootcamp.editBootcamper(id).url,
+//     data,
+//   )
+// }
