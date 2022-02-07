@@ -32,7 +32,7 @@ export const endpoints = {
   bootcamp: {
     students: <Endpoint>{ url: '/bootcamp/all', method: 'GET' },
     createBootcamper: <Endpoint>{ url: '/bootcamp', method: 'POST' },
-    viewBootcamper: (id: string) => <Endpoint>{ url: '/bootcamp/' + id, method: 'GET' },
+    viewBootcamper: (id: string) => <Endpoint>{ url: `/bootcamp/${id}`, method: 'GET' },
     editBootcamper: (id: string) => <Endpoint>{ url: `/bootcamp/${id}`, method: 'PATCH' },
     deleteBootcamper: (id: string) => <Endpoint>{ url: `/bootcamp/${id}`, method: 'DELETE' },
   },

@@ -50,8 +50,8 @@ export const routes = {
     supporters: '/admin/supporters',
   },
   bootcamp: {
-    index: 'bootcamp',
-    create: 'bootcamp/create',
-    edit: 'bootcamp/edit',
+    index: '/bootcamp',
+    create: '/bootcamp/create',
+    edit: '/bootcamp/edit',
   },
 }

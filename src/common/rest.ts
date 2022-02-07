@@ -12,7 +12,7 @@ import { CampaignResponse, CampaignInput } from 'gql/campaigns'
 import { endpoints } from './api-endpoints'
 import { CheckoutSessionInput, CheckoutSessionResponse } from 'gql/donations'
 import { CreateBeneficiaryInput, PersonResponse } from 'gql/person'
-import { BootcampInput, BootcampType } from 'gql/bootcamp'
+import { BootcampEdit, BootcampInput, BootcampType } from 'gql/bootcamp'
 
 export const queryFn: QueryFunction = async function ({ queryKey }) {
   const response = await axios.get(queryKey.join('/'))
@@ -86,10 +86,28 @@ export const createBootcamper: MutationFunction<AxiosResponse<BootcampType>, Boo
     )
   }
 
-// export const editBootcamper: MutationFunction<AxiosResponse<BootcampType>, BootcampInput > =
-// async (data: BootcampInput, id: string) => {
-//   return await axios.patch<BootcampInput, AxiosResponse<BootcampType>>(
-//     endpoints.bootcamp.editBootcamper(id).url,
-//     data,
-//   )
-// }
+export const editBootcamper: MutationFunction<AxiosResponse<BootcampType>, BootcampEdit> = async ({
+  data,
+  id,
+}: BootcampEdit) => {
+  return await axios.patch<BootcampInput, AxiosResponse<BootcampType>>(
+    endpoints.bootcamp.editBootcamper(id).url,
+    data,
+  )
+}
+
+export const deleteBootcamper: MutationFunction<AxiosResponse<BootcampType>, string> = async (
+  id: string,
+) => {
+  return await axios.delete<string, AxiosResponse<BootcampType>>(
+    endpoints.bootcamp.deleteBootcamper(id).url,
+  )
+}
+
+export const viewBootcamper: MutationFunction<AxiosResponse<BootcampType>, string> = async (
+  id: string,
+) => {
+  return await axios.get<string, AxiosResponse<BootcampType>>(
+    endpoints.bootcamp.viewBootcamper(id).url,
+  )
+}
