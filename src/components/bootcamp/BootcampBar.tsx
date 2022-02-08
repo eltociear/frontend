@@ -13,7 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 
-import { drawerWidth } from './BootcampDrawer'
+import BootcampDrawer, { drawerWidth } from './BootcampDrawer'
 import PodkrepiIcon from 'components/brand/PodkrepiIcon'
 import { DrawerStore } from 'stores/bootcamp/DrawerStore'
 
@@ -52,7 +52,7 @@ export default observer(function BootcampBar() {
       elevation={2}
       className={isDrawerOpen ? `${classes.shrinkedAppbar}` : `${classes.appbar}`}>
       <Toolbar disableGutters>
-        {/* <BootcampDrawer /> */}
+        <BootcampDrawer />
         <IconButton onClick={changeHandler} sx={{ mr: 2 }}>
           <MenuIcon color="secondary" />
         </IconButton>
@@ -64,11 +64,10 @@ export default observer(function BootcampBar() {
             Admin Panel
           </Typography>
         </Box>
-
         <Box sx={{ flexGrow: 0 }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Kalin" src="" />
+              <Avatar alt="Kalin" />
             </IconButton>
           </Tooltip>
           <Menu
