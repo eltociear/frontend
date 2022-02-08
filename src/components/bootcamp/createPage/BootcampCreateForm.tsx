@@ -1,24 +1,20 @@
 import * as yup from 'yup'
-import { AxiosError } from 'axios'
-import { observer } from 'mobx-react'
-import { FormikHelpers } from 'formik'
-import { useRouter } from 'next/router'
-import { makeStyles } from '@mui/styles'
+import { AxiosError, AxiosResponse } from 'axios'
 import { useMutation } from 'react-query'
+import { FormikHelpers } from 'formik'
 import { useTranslation } from 'next-i18next'
+import { makeStyles } from '@mui/styles'
 import { Grid, Typography } from '@mui/material'
 
-import { routes } from 'common/routes'
-import { axios } from 'common/api-client'
-import { endpoints } from 'common/api-endpoints'
 import GenericForm from 'components/common/form/GenericForm'
 import SubmitButton from 'components/common/form/SubmitButton'
 import FormTextField from 'components/common/form/FormTextField'
 import { ApiErrors, isAxiosError, matchValidator } from 'common/api-errors'
-import { BootcampInput } from 'gql/bootcamp'
-import { NotificationStore } from 'stores/bootcamp/NotificationStore'
+import { BootcampInput, BootcampType } from 'gql/bootcamp'
 
 import { drawerWidth } from '../BootcampDrawer'
+import { createBootcamper } from 'common/rest'
+import { AlertStore } from 'stores/AlertStore'
 
 const useStyles = makeStyles(() => {
   return {
@@ -32,35 +28,33 @@ const useStyles = makeStyles(() => {
   }
 })
 
+const validationSchema: yup.SchemaOf<BootcampInput> = yup
+  .object()
+  .defined()
+  .shape({
+    firstName: yup.string().trim().min(2).max(30).required(),
+    lastName: yup.string().trim().min(2).max(30).required(),
+  })
+
 const defaults: BootcampInput = {
   firstName: '',
   lastName: '',
 }
 
-export default observer(function BootcampCreateForm() {
-  const router = useRouter()
+export default function BootcampCreateForm() {
   const classes = useStyles()
   const { t } = useTranslation()
-  const { setNotificationMessage, showNotification } = NotificationStore
 
-  const createBootcamper = async (bootcamperData: BootcampInput) => {
-    await axios.post(endpoints.bootcamp.createBootcamper.url, bootcamperData)
-  }
-
-  const mutation = useMutation({
+  const mutation = useMutation<AxiosResponse<BootcampType>, AxiosError<ApiErrors>, BootcampInput>({
     mutationFn: createBootcamper,
-    onError: () => {
-      showNotification()
-      setNotificationMessage('Something went wrong, please try again later.')
-    },
-    onSuccess: () => {
-      router.push(routes.bootcamp.create)
-      showNotification()
-      setNotificationMessage('Sucessfully created new Bootcamper.')
-    },
+    onError: () => AlertStore.show(t('common:alerts.error'), 'error'),
+    onSuccess: () => AlertStore.show(t('common:alerts.message-sent'), 'success'),
   })
 
-  const onSubmit = async (values: any, { setFieldError, resetForm }: FormikHelpers<any>) => {
+  const onSubmit = async (
+    values: BootcampInput,
+    { setFieldError, resetForm }: FormikHelpers<BootcampInput>,
+  ) => {
     try {
       await mutation.mutateAsync({
         firstName: values.firstName,
@@ -83,7 +77,7 @@ export default observer(function BootcampCreateForm() {
       <Typography variant="h3" className={classes.internFormHeader}>
         Create new Bootcamper
       </Typography>
-      <GenericForm onSubmit={onSubmit} initialValues={defaults}>
+      <GenericForm onSubmit={onSubmit} initialValues={defaults} validationSchema={validationSchema}>
         <Grid container spacing={1.3}>
           <Grid item xs={12}>
             <FormTextField
@@ -103,4 +97,4 @@ export default observer(function BootcampCreateForm() {
       </GenericForm>
     </Grid>
   )
-})
+}
