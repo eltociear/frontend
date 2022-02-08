@@ -4,7 +4,7 @@ import { useMutation } from 'react-query'
 import { FormikHelpers } from 'formik'
 import { useTranslation } from 'next-i18next'
 import { makeStyles } from '@mui/styles'
-import { Grid, Typography } from '@mui/material'
+import { Button, Grid, Typography } from '@mui/material'
 
 import GenericForm from 'components/common/form/GenericForm'
 import SubmitButton from 'components/common/form/SubmitButton'
@@ -15,6 +15,8 @@ import { BootcampInput, BootcampType } from 'gql/bootcamp'
 import { drawerWidth } from '../BootcampDrawer'
 import { createBootcamper } from 'common/rest'
 import { AlertStore } from 'stores/AlertStore'
+import { useRouter } from 'next/router'
+import { routes } from 'common/routes'
 
 const useStyles = makeStyles(() => {
   return {
@@ -43,6 +45,7 @@ const defaults: BootcampInput = {
 
 export default function BootcampCreateForm() {
   const classes = useStyles()
+  const router = useRouter()
   const { t } = useTranslation()
 
   const mutation = useMutation<AxiosResponse<BootcampType>, AxiosError<ApiErrors>, BootcampInput>({
@@ -74,9 +77,14 @@ export default function BootcampCreateForm() {
 
   return (
     <Grid className={classes.internForm} container direction="column" component="section">
-      <Typography variant="h3" className={classes.internFormHeader}>
-        Create new Bootcamper
-      </Typography>
+      <Grid container justifyContent={'space-between'} className={classes.internFormHeader}>
+        <Typography variant="h4" component="h1">
+          Create new Bootcamper
+        </Typography>
+        <Button size="medium" variant="outlined" onClick={() => router.push(routes.bootcamp.index)}>
+          View All
+        </Button>
+      </Grid>
       <GenericForm onSubmit={onSubmit} initialValues={defaults} validationSchema={validationSchema}>
         <Grid container spacing={1.3}>
           <Grid item xs={12}>
