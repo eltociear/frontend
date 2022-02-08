@@ -47,7 +47,7 @@ const useStyles = makeStyles(() => {
 
 const menuItems = [
   { text: 'Bootcampers', icon: <PeopleIcon />, path: '/bootcamp' },
-  { text: 'Add New Bootcamper', icon: <AddBoxIcon />, path: '/bootcamp/create' },
+  { text: 'Add New Bootcamper', icon: <AddCircleIcon />, path: '/bootcamp/create' },
   { text: 'Campain', icon: <LibraryBooksIcon />, path: '/campain' },
   { text: 'Cities', icon: <AccountBalanceIcon />, path: '/cities' },
 ]
@@ -60,7 +60,6 @@ export default function BootcampDrawer() {
 
   return (
     <SwipeableDrawer
-      title="Menu"
       elevation={2}
       ModalProps={{
         hideBackdrop: true,
