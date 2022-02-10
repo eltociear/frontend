@@ -6,9 +6,7 @@ import BootcampCreateForm from './BootcampCreateForm'
 export default function BootcamperCreatePage() {
   return (
     <BootcampLayout>
-      <Grid container>
-        <BootcampCreateForm />
-      </Grid>
+      <BootcampCreateForm />
     </BootcampLayout>
   )
 }

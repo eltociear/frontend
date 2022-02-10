@@ -2,6 +2,7 @@ import * as yup from 'yup'
 import { AxiosError, AxiosResponse } from 'axios'
 import { useMutation } from 'react-query'
 import { FormikHelpers } from 'formik'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { makeStyles } from '@mui/styles'
 import { Button, Grid, Typography } from '@mui/material'
@@ -9,14 +10,14 @@ import { Button, Grid, Typography } from '@mui/material'
 import GenericForm from 'components/common/form/GenericForm'
 import SubmitButton from 'components/common/form/SubmitButton'
 import FormTextField from 'components/common/form/FormTextField'
+
 import { ApiErrors, isAxiosError, matchValidator } from 'common/api-errors'
-import { BootcampEdit, BootcampInput, BootcampType } from 'gql/bootcamp'
+import { createBootcamper, editBootcamper } from 'common/rest'
+import { routes } from 'common/routes'
+import { BootcampType } from 'gql/bootcamp'
+import { AlertStore } from 'stores/AlertStore'
 
 import { drawerWidth } from '../BootcampDrawer'
-import { createBootcamper, editBootcamper } from 'common/rest'
-import { AlertStore } from 'stores/AlertStore'
-import { useRouter } from 'next/router'
-import { routes } from 'common/routes'
 
 const useStyles = makeStyles(() => {
   return {
@@ -45,10 +46,10 @@ const defaults: BootcampType = {
   id: '',
 }
 
-export default function BootcampCreateForm(valus: any) {
-  defaults.firstName = valus ? valus.firstName : ''
-  defaults.lastName = valus ? valus.lastName : ''
-  defaults.id = valus ? valus.id : ''
+export default function BootcampCreateForm(dataValues: any) {
+  defaults.firstName = dataValues ? dataValues.firstName : ''
+  defaults.lastName = dataValues ? dataValues.lastName : ''
+  defaults.id = dataValues ? dataValues.id : ''
 
   const classes = useStyles()
   const router = useRouter()
@@ -57,7 +58,7 @@ export default function BootcampCreateForm(valus: any) {
   const mutation = useMutation<AxiosResponse<BootcampType>, AxiosError<ApiErrors>, BootcampType>({
     mutationFn: defaults.id ? editBootcamper : createBootcamper,
     onError: () => AlertStore.show(t('common:alerts.error'), 'error'),
-    onSuccess: () => AlertStore.show(t('common:alerts.message-sent'), 'success'),
+    onSuccess: () => AlertStore.show('Succes', 'success'),
   })
 
   const onSubmit = async (
@@ -65,14 +66,15 @@ export default function BootcampCreateForm(valus: any) {
     { setFieldError, resetForm }: FormikHelpers<BootcampType>,
   ) => {
     try {
-      router.push(routes.bootcamp.index)
-
       await mutation.mutateAsync({
         firstName: values.firstName,
         lastName: values.lastName,
         id: defaults.id,
       })
-      resetForm()
+      // if (defaults.id) {
+      router.push(routes.bootcamp.index)
+      // }
+      // resetForm()
     } catch (error) {
       console.error(error)
       if (isAxiosError(error)) {

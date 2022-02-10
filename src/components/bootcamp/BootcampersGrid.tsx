@@ -35,9 +35,10 @@ function editClickHandler(cellValues: GridRenderCellParams) {
 }
 
 async function deleteClickHandler(cellValues: GridCellParams) {
-  const result = await deleteBootcamper(String(cellValues.id))
-  if (result.status == 200) {
-    ;() => AlertStore.show(`Deleted: ${result.data.id}`, 'success')
+  const { data } = await deleteBootcamper(String(cellValues.id))
+  console.log('-----------', data)
+  if (data) {
+    ;() => AlertStore.show(`Deleted: ${data.id}`, 'success')
     router.push(routes.bootcamp.index)
   } else {
     ;() => AlertStore.show(`Unsuccessfull Deleted!`, 'error')

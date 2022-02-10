@@ -1,5 +1,3 @@
-import { Grid } from '@mui/material'
-
 import BootcampLayout from '../BootcampLayout'
 import BootcampCreateForm from '../createPage/BootcampCreateForm'
 

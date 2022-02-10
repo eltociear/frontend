@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material'
+import { Snackbar, Theme } from '@mui/material'
 import makeStyles from '@mui/styles/makeStyles'
 import createStyles from '@mui/styles/createStyles'
 import BootcampFooter from './BootcampFooter'
@@ -25,6 +25,7 @@ export default function MyLayout(props: any) {
       <BootcampBar />
       <div className={classes.page}>{props.children}</div>
       <BootcampFooter />
+      <Snackbar />
     </div>
   )
 }
