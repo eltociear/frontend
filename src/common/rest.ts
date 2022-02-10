@@ -86,12 +86,11 @@ export const createBootcamper: MutationFunction<AxiosResponse<BootcampType>, Boo
     )
   }
 
-export const editBootcamper: MutationFunction<AxiosResponse<BootcampType>, BootcampEdit> = async ({
-  data,
-  id,
-}: BootcampEdit) => {
+export const editBootcamper: MutationFunction<AxiosResponse<BootcampType>, BootcampType> = async (
+  data: BootcampType,
+) => {
   return await axios.patch<BootcampInput, AxiosResponse<BootcampType>>(
-    endpoints.bootcamp.editBootcamper(id).url,
+    endpoints.bootcamp.editBootcamper(data.id).url,
     data,
   )
 }

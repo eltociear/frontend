@@ -1,22 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Grid } from '@mui/material'
-import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid'
+import {
+  DataGrid,
+  GridCellParams,
+  GridCellValue,
+  GridColumns,
+  GridRenderCellParams,
+} from '@mui/x-data-grid'
 import InfoIcon from '@mui/icons-material/Info'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 
 import { useBootcampList } from 'common/hooks/bootcampers'
+import { deleteBootcamper } from 'common/rest'
+import { useMutation } from 'react-query'
+import { AxiosError, AxiosResponse } from 'axios'
+import { BootcampInput, BootcampType } from 'gql/bootcamp'
+import { AlertStore } from 'stores/AlertStore'
+import { ApiErrors } from 'common/api-errors'
+import router from 'next/router'
+import { routes } from 'common/routes'
+import { string } from 'yup'
+
+// const [open, setOpen] = useState(false)
+// const [details, setDetails] = useState({})
 
 function detailsClickHandler(cellValues: GridRenderCellParams) {
-  console.log(cellValues.id)
+  // setDetails({ ...cellValues.row })
+  // setOpen(true)
 }
 
 function editClickHandler(cellValues: GridRenderCellParams) {
-  console.log(cellValues.id)
+  router.push(routes.bootcamp.edit(String(cellValues.id)))
 }
 
-function deleteClickHandler(cellValues: GridRenderCellParams) {
-  console.log(cellValues.id)
+async function deleteClickHandler(cellValues: GridCellParams) {
+  const result = await deleteBootcamper(String(cellValues.id))
+  if (result.status == 200) {
+    ;() => AlertStore.show(`Deleted: ${result.data.id}`, 'success')
+    router.push(routes.bootcamp.index)
+  } else {
+    ;() => AlertStore.show(`Unsuccessfull Deleted!`, 'error')
+  }
 }
 
 const columns: GridColumns = [
