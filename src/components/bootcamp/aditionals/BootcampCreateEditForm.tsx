@@ -18,6 +18,7 @@ import { BootcampType } from 'gql/bootcamp'
 import { AlertStore } from 'stores/AlertStore'
 
 import { drawerWidth } from './BootcampDrawer'
+import { useViewBootcamper } from 'common/hooks/bootcampers'
 
 const useStyles = makeStyles(() => {
   return {
@@ -40,16 +41,16 @@ const validationSchema: yup.SchemaOf<BootcampType> = yup
     id: yup.string(),
   })
 
-const defaults: BootcampType = {
+let defaults: BootcampType = {
   firstName: '',
   lastName: '',
   id: '',
 }
+type Props = { id: string }
+export default function BootcampCreateEditForm({ id }: Props) {
+  const { data } = useViewBootcamper(id)
 
-export default function BootcampCreateForm(dataValues: any) {
-  defaults.firstName = dataValues ? dataValues.firstName : ''
-  defaults.lastName = dataValues ? dataValues.lastName : ''
-  defaults.id = dataValues ? dataValues.id : ''
+  defaults = data ? Object.assign(defaults, data) : defaults
 
   const classes = useStyles()
   const router = useRouter()
@@ -71,10 +72,11 @@ export default function BootcampCreateForm(dataValues: any) {
         lastName: values.lastName,
         id: defaults.id,
       })
-      // if (defaults.id) {
-      router.push(routes.bootcamp.index)
-      // }
-      // resetForm()
+      if (defaults.id) {
+        router.push(routes.bootcamp.index)
+      } else {
+        resetForm()
+      }
     } catch (error) {
       console.error(error)
       if (isAxiosError(error)) {

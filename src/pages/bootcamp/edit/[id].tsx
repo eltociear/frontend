@@ -15,11 +15,10 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, query }) 
 
   // const { data: values }  = await useViewBootcamper(String(id))
 
-  const { data: values } = await axios.get(endpoints.bootcamp.viewBootcamper(String(id)).url)
+  // const { data: values } = await axios.get(endpoints.bootcamp.viewBootcamper(String(id)).url)
   await client.prefetchQuery(`/bootcamp/${id}`, queryFn)
   return {
     props: {
-      values,
       id,
       ...(await serverSideTranslations(locale ?? 'bg', ['common', 'validation'])),
       dehydratedState: dehydrate(client),

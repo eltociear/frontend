@@ -8,5 +8,5 @@ export function useBootcampList() {
 }
 
 export function useViewBootcamper(id: string) {
-  return useQuery<{ bootcamper: BootcampType }>(endpoints.bootcamp.viewBootcamper(id).url)
+  return useQuery<BootcampType>(endpoints.bootcamp.viewBootcamper(id).url)
 }
