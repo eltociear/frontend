@@ -1,0 +1,11 @@
+{
+  "title":{
+    "bootcampers": "Bootcampers",
+    "create": "Create new",
+    "edit": "Edit"
+  },
+  "grid":{
+    "fname": "Name",
+    "lname": "Family name"
+  }
+}

@@ -92,7 +92,7 @@ export default function BootcampCreateEditForm({ id }: Props) {
     <Grid className={classes.internForm} container direction="column" component="section">
       <Grid container justifyContent={'space-between'} className={classes.internFormHeader}>
         <Typography variant="h4" component="h1">
-          {defaults.id ? 'Edit' : 'Add new'} Bootcamper
+          {defaults.id ? t('bootcamp:title.edit') : t('bootcamp:title.create')}
         </Typography>
         <Button size="medium" variant="outlined" onClick={() => router.push(routes.bootcamp.index)}>
           View All
