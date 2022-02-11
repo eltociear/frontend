@@ -17,7 +17,7 @@ import { routes } from 'common/routes'
 import { BootcampType } from 'gql/bootcamp'
 import { AlertStore } from 'stores/AlertStore'
 
-import { drawerWidth } from '../BootcampDrawer'
+import { drawerWidth } from './BootcampDrawer'
 
 const useStyles = makeStyles(() => {
   return {

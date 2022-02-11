@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next'
 import { dehydrate, QueryClient } from 'react-query'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import BootcamperEditPage from 'components/bootcamp/editPage/BootcamperEditPage'
+import BootcamperEditPage from 'components/bootcamp/BootcamperEditPage'
 
 import { endpoints } from 'common/api-endpoints'
 import { axios } from 'common/api-client'
