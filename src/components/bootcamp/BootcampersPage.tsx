@@ -1,5 +1,4 @@
 import React from 'react'
-import { Container } from '@mui/material'
 
 import BootcampersGrid from './aditionals/BootcampersGrid'
 import OnBootcampersGrid from './aditionals/OnBootcampersGrid'

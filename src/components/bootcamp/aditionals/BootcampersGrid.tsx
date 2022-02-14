@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Grid } from '@mui/material'
+import { Box, Button, Grid } from '@mui/material'
 import {
   DataGrid,
   GridCellParams,
@@ -23,15 +23,7 @@ import { routes } from 'common/routes'
 import { string } from 'yup'
 import DetailsModal from 'components/modal/DetailsModal'
 import ConfirmationDialog from 'components/common/ConfirmationDialog'
-
-// const [open, setOpen] = useState(false)
-// const [details, setDetails] = useState({})
-
-function detailsClickHandler(cellValues: GridRenderCellParams) {
-  AlertStore.show(`${cellValues.id}`, 'info')
-  // setDetails({ ...cellValues.row })
-  // setOpen(true)
-}
+import BootInfoModal from './BootInfoModal'
 
 function editClickHandler(cellValues: GridRenderCellParams) {
   router.push(routes.bootcamp.edit(String(cellValues.id)))
@@ -62,55 +54,66 @@ const deleteClickHandler = async (cellValues: GridCellParams) => {
   // }
 }
 
-const columns: GridColumns = [
-  { field: 'id', headerName: 'ID', hide: true },
-  {
-    field: 'firstName',
-    headerName: 'First Name',
-    editable: true,
-    width: 220,
-  },
-  {
-    field: 'lastName',
-    headerName: 'Last Name',
-    editable: true,
-    width: 260,
-  },
-  {
-    field: 'actions',
-    headerName: '',
-    renderCell: (cellValues) => {
-      return (
-        <Grid>
-          <Button>
-            <InfoIcon onClick={() => detailsClickHandler(cellValues)} />
-          </Button>
-          <Button>
-            <EditIcon onClick={() => editClickHandler(cellValues)} />
-          </Button>
-          <Button>
-            <DeleteIcon onClick={() => deleteClickHandler(cellValues)} />
-          </Button>
-        </Grid>
-      )
-    },
-    width: 200,
-    align: 'right',
-  },
-]
-
 export default function BootcampersGrid() {
   const { data } = useBootcampList()
 
+  const [open, setOpen] = useState(false)
+  const [details, setDetails] = useState({})
+
+  function detailsClickHandler(cellValues: GridCellParams) {
+    setDetails(cellValues.row)
+    setOpen(true)
+  }
+
+  const columns: GridColumns = [
+    { field: 'id', headerName: 'ID', hide: true },
+    {
+      field: 'firstName',
+      headerName: 'First Name',
+      editable: true,
+      width: 220,
+    },
+    {
+      field: 'lastName',
+      headerName: 'Last Name',
+      editable: true,
+      width: 260,
+    },
+    {
+      field: 'actions',
+      headerName: '',
+      renderCell: (cellValues) => {
+        return (
+          <Grid>
+            <Button>
+              <InfoIcon onClick={() => detailsClickHandler(cellValues)} />
+            </Button>
+            <Button>
+              <EditIcon onClick={() => editClickHandler(cellValues)} />
+            </Button>
+            <Button>
+              <DeleteIcon onClick={() => deleteClickHandler(cellValues)} />
+            </Button>
+          </Grid>
+        )
+      },
+      width: 200,
+      align: 'right',
+    },
+  ]
+
   return (
-    <DataGrid
-      rows={data || []}
-      columns={columns}
-      pageSize={4}
-      autoHeight
-      autoPageSize
-      checkboxSelection
-      disableSelectionOnClick
-    />
+    <Box>
+      <DataGrid
+        rows={data || []}
+        columns={columns}
+        pageSize={4}
+        autoHeight
+        autoPageSize
+        checkboxSelection
+        disableSelectionOnClick
+      />
+      <BootInfoModal info={{ open, setOpen, details }} />
+    </Box>
   )
 }
