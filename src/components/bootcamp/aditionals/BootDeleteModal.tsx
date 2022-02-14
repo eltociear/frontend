@@ -1,32 +1,38 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-} from '@mui/material'
+import { Dialog, DialogTitle, DialogActions, Button, Grid } from '@mui/material'
+import { deleteBootcamper } from 'common/rest'
+import { AlertStore } from 'stores/AlertStore'
 
-export default function BootcampModal(props: any) {
-  const { firstName, lastName, open, setOpen } = props.modalProps
+export default function BootDeleteModal(props: any) {
+  const { openDelete, setOpenDelete, details } = props.info
+
+  const onDeleteClick = (id: any) => async () => {
+    console.log(id)
+    try {
+      setOpenDelete(false)
+      await deleteBootcamper(id)
+      AlertStore.show(`Deleted: ${id}`, 'success')
+      window.location.reload()
+    } catch (err) {
+      AlertStore.show(`Unsuccessfull Deleted!`, 'error')
+    }
+  }
+
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} aria-labelledby="draggable-dialog-title">
-      <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-        Bootcamper Details
-      </DialogTitle>
-      <Divider />
-      <DialogContent>
-        <DialogContentText>
-          <Box fontSize={18}>First Name:{firstName}</Box>
-          <Box fontSize={18}>Last Name: {lastName}</Box>
-        </DialogContentText>
-      </DialogContent>
+    <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+      <DialogTitle>Are you sure to delete:</DialogTitle>
+      <Grid fontSize={18} m={2}>
+        {' '}
+        First Name: {details.firstName}
+      </Grid>
+      <Grid fontSize={18} m={2}>
+        {' '}
+        Last Name: {details.lastName}
+      </Grid>
       <DialogActions>
-        <Button variant="contained" onClick={() => setOpen(false)}>
-          Close
+        <Button onClick={onDeleteClick(details.id)} autoFocus>
+          Yes
         </Button>
+        <Button onClick={() => setOpenDelete(false)}>No</Button>
       </DialogActions>
     </Dialog>
   )

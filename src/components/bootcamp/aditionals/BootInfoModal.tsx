@@ -10,10 +10,9 @@ import {
 } from '@mui/material'
 
 export default function BootInfoModal(props: any) {
-  console.log(props)
-  const { open, setOpen, details } = props.info
+  const { openInfo, setOpenInfo, details } = props.info
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={openInfo} onClose={() => setOpenInfo(false)}>
       <DialogTitle>Bootcamper Details</DialogTitle>
       <Divider />
       <DialogContent>
@@ -23,7 +22,7 @@ export default function BootInfoModal(props: any) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={() => setOpen(false)}>
+        <Button variant="contained" onClick={() => setOpenInfo(false)}>
           Close
         </Button>
       </DialogActions>
