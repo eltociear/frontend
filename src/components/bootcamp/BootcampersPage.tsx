@@ -8,10 +8,8 @@ import BootcampLayout from './aditionals/BootcampLayout'
 export default function BootcampersPage() {
   return (
     <BootcampLayout>
-      <Container sx={{ width: 780, p: 8 }}>
-        <OnBootcampersGrid />
-        <BootcampersGrid />
-      </Container>
+      <OnBootcampersGrid />
+      <BootcampersGrid />
     </BootcampLayout>
   )
 }

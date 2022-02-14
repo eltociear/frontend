@@ -21,11 +21,14 @@ import { ApiErrors } from 'common/api-errors'
 import router from 'next/router'
 import { routes } from 'common/routes'
 import { string } from 'yup'
+import DetailsModal from 'components/modal/DetailsModal'
+import ConfirmationDialog from 'components/common/ConfirmationDialog'
 
 // const [open, setOpen] = useState(false)
 // const [details, setDetails] = useState({})
 
 function detailsClickHandler(cellValues: GridRenderCellParams) {
+  AlertStore.show(`${cellValues.id}`, 'info')
   // setDetails({ ...cellValues.row })
   // setOpen(true)
 }
@@ -34,15 +37,29 @@ function editClickHandler(cellValues: GridRenderCellParams) {
   router.push(routes.bootcamp.edit(String(cellValues.id)))
 }
 
-async function deleteClickHandler(cellValues: GridCellParams) {
-  const { data } = await deleteBootcamper(String(cellValues.id))
-  console.log('-----------', data)
-  if (data) {
-    ;() => AlertStore.show(`Deleted: ${data.id}`, 'success')
+const deleteClickHandler = async (cellValues: GridCellParams) => {
+  const mutation = useMutation<AxiosResponse<BootcampType>, AxiosError<ApiErrors>, string>({
+    mutationFn: deleteBootcamper,
+    onError: () => AlertStore.show('delete error', 'error'),
+    onSuccess: () => AlertStore.show('success', 'success'),
+  })
+  try {
+    await mutation.mutateAsync(String(cellValues.id))
     router.push(routes.bootcamp.index)
-  } else {
-    ;() => AlertStore.show(`Unsuccessfull Deleted!`, 'error')
+  } catch (error) {
+    AlertStore.show('delete error', 'error')
   }
+  // setDeleteOpen(false)
+  // router.push(routes.bootcamp.index)
+
+  // const { data } = await deleteBootcamper(String(cellValues.id))
+
+  // if (data) {
+  //   AlertStore.show(`Deleted: ${data.id}`, 'success')
+  //   router.push(routes.bootcamp.index)
+  // } else {
+  //   AlertStore.show(`Unsuccessfull Deleted!`, 'error')
+  // }
 }
 
 const columns: GridColumns = [

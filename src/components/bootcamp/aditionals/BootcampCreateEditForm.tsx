@@ -17,14 +17,12 @@ import { routes } from 'common/routes'
 import { BootcampType } from 'gql/bootcamp'
 import { AlertStore } from 'stores/AlertStore'
 
-import { drawerWidth } from './BootcampDrawer'
 import { useViewBootcamper } from 'common/hooks/bootcampers'
 
 const useStyles = makeStyles(() => {
   return {
     internForm: {
-      marginLeft: drawerWidth,
-      marginTop: '200px',
+      marginTop: '100px',
     },
     internFormHeader: {
       marginBottom: '50px',
@@ -41,16 +39,18 @@ const validationSchema: yup.SchemaOf<BootcampType> = yup
     id: yup.string(),
   })
 
-let defaults: BootcampType = {
-  firstName: '',
-  lastName: '',
-  id: '',
-}
 type Props = { id: string }
-export default function BootcampCreateEditForm({ id }: Props) {
-  const { data } = useViewBootcamper(id)
-
-  defaults = data ? Object.assign(defaults, data) : defaults
+type Nrops = { id: undefined }
+export default function BootcampCreateEditForm({ id }: Props | Nrops) {
+  let defaults: BootcampType = {
+    firstName: '',
+    lastName: '',
+    id: '',
+  }
+  if (id) {
+    const { data } = useViewBootcamper(id)
+    defaults = data ? Object.assign(defaults, data) : defaults
+  }
 
   const classes = useStyles()
   const router = useRouter()
